@@ -15,16 +15,10 @@ export default function App() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const hasFinalizeEventOccurredRef = useRef(false);
 
-  // Determine the correct API URL based on the current environment
+  // Always use current host IP with backend port
   const getApiUrl = () => {
-    if (import.meta.env.DEV) {
-      // Development mode - use localhost
-      return "http://localhost:2024";
-    } else {
-      // Production mode - use current host IP with backend port
-      const currentHost = window.location.hostname;
-      return `http://${currentHost}:2024`;
-    }
+    const currentHost = window.location.hostname;
+    return `http://${currentHost}:2024`;
   };
 
   const thread = useStream<{
