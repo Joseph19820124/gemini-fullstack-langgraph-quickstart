@@ -15,15 +15,25 @@ export default function App() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const hasFinalizeEventOccurredRef = useRef(false);
 
+  // Determine the correct API URL based on the current environment
+  const getApiUrl = () => {
+    if (import.meta.env.DEV) {
+      // Development mode - use localhost
+      return "http://localhost:2024";
+    } else {
+      // Production mode - use current host IP with backend port
+      const currentHost = window.location.hostname;
+      return `http://${currentHost}:2024`;
+    }
+  };
+
   const thread = useStream<{
     messages: Message[];
     initial_search_query_count: number;
     max_research_loops: number;
     reasoning_model: string;
   }>({
-    apiUrl: import.meta.env.DEV
-      ? "http://localhost:2024"
-      : "http://localhost:8123",
+    apiUrl: getApiUrl(),
     assistantId: "agent",
     messagesKey: "messages",
     onFinish: (event: any) => {
